@@ -71,7 +71,7 @@
   users.users.guinaifen = {
     isNormalUser = true;
     description = "Guinaifen";
-    extraGroups = [ "networkmanager" "wheel" "adbusers" ];
+    extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd" ];
     shell = pkgs.fish;
   };
 
