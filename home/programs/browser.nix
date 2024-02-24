@@ -32,7 +32,7 @@
     pkgs.telegram-desktop
     pkgs.thunderbird
 
-    (pkgs.vivaldi.override {
+    (pkgs-unstable.vivaldi.override {
       proprietaryCodecs = true;
       enableWidevine = true;
     })

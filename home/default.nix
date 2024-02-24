@@ -3,7 +3,7 @@
 {
   imports = [
     ./programs
-    ./fonts
+    # ./fonts
   ];
 
   nixpkgs = { 
@@ -20,7 +20,7 @@
     stateVersion = "23.11";
   };
 
-  fonts.fontconfig.enable = true;
+  # fonts.fontconfig.enable = true;
 
   programs.home-manager.enable = true;
 

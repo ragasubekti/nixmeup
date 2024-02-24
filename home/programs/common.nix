@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     # kitty
     nnn
+    pkgs-unstable.fastfetch
 
     xdg-utils
     fzf
@@ -64,6 +65,8 @@
     distrobox
 
     pkgs-unstable.emacs-nox
+
+    nil
   ];
 
   programs = {

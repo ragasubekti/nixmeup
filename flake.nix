@@ -41,7 +41,7 @@
 
       pkgs-unstable = import nixpkgs-unstable { inherit system; config = { allowUnfree = true; }; };
       pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
-      aagl-nix = aagl.packages.${system};
+      # aagl-nix = aagl.packages.${system};
     in
     {
       nixosConfigurations.starward = nixpkgs.lib.nixosSystem {
@@ -62,8 +62,8 @@
               }; })
             ];
 
-            imports = [ aagl.nixosModules.default ];
-            nix.settings = aagl.nixConfig;
+            # imports = [ aagl.nixosModules.default ];
+            # nix.settings = aagl.nixConfig;
           }
 
           home-manager.nixosModules.home-manager
@@ -71,7 +71,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
-            home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable aagl-nix; };
+            home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable; };
             home-manager.users.guinaifen = import ./home;
           }
         ];

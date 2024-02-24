@@ -50,6 +50,14 @@
 
   services.printing.enable = false;
   services.flatpak.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk  pkgs.xdg-desktop-portal-kde ];
+  };
+
+
+  fonts.fontDir.enable = true;
   
   services.ratbagd.enable = true;
 
@@ -111,6 +119,26 @@
     wallpaper-engine-kde
   ];
 
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    liberation_ttf
+    merriweather
+
+    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" "CascadiaCode" ]; })
+  ];
+
+    fontconfig.defaultFonts = {
+      serif = [ "Merriweather" ];
+      sansSerif = [ "Noto Sans" ];
+      monospace = [ "CaskaydiaCove Nerd Font Mono" ];
+    };
+  };
+
+
   nixpkgs.config.packageOverrides = pkgs: {
     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
   };
@@ -140,7 +168,7 @@
   programs.fish.enable = true;
   programs.dconf.enable = true;
 
-  programs.steam.enable = true;
+  # programs.steam.enable = true;
   programs.gamemode.enable = true;
 
   programs.adb.enable = true;

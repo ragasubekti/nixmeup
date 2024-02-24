@@ -1,5 +1,5 @@
 {
-  lib, pkgs, inputs, pkgs-unstable, aagl-nix, ...
+  lib, pkgs, inputs, pkgs-unstable, ...
 }: {
   home.packages = [
     inputs.nix-gaming.packages.${pkgs.hostPlatform.system}.osu-lazer-bin
@@ -7,8 +7,5 @@
 
     pkgs-unstable.lutris
     pkgs-unstable.bottles
-
-    aagl-nix.anime-game-launcher
-    aagl-nix.honkers-railway-launcher
   ];
 }
