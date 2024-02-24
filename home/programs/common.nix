@@ -19,6 +19,8 @@
     dbeaver
     mycli
     pgcli
+
+    keepassxc
   ];
 
   programs = {
