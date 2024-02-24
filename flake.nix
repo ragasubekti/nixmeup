@@ -51,7 +51,6 @@
 
         modules = [
           ./hosts
-          
 
           {
             nixpkgs.overlays = [ 
@@ -76,6 +75,25 @@
             home-manager.users.guinaifen = import ./home;
           }
         ];
+
+      };
+
+      devShells.${system}.dotnet8 = let
+        pkgs = import nixpkgs {
+            inherit system;
+        };
+        in pkgs.mkShell {
+          packages = with pkgs; [
+            dotnet-sdk_8
+            dotnet-runtime_8
+            SDL2
+            ffmpeg-full
+            nushell
+        ];
+
+        shellHook = ''
+          exec nu
+        '';
       };
     };
 }

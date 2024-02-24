@@ -2,7 +2,7 @@
   lib, pkgs, pkgs-unstable, ...
 }: {
   home.packages = with pkgs; [
-    kitty
+    # kitty
     nnn
 
     xdg-utils
@@ -62,6 +62,8 @@
     trash-cli
 
     distrobox
+
+    pkgs-unstable.emacs-nox
   ];
 
   programs = {

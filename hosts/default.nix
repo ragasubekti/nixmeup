@@ -5,7 +5,6 @@
       ./hardware-configuration.nix
       ./virtualization.nix
       inputs.nix-gaming.nixosModules.pipewireLowLatency
-      inputs.nix-gaming.nixosModules.steamCompat
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -71,8 +70,12 @@
     };
   };
 
+  zramSwap.enable = true;
 
-  services.zram-generator.enable = true;
+  # services.zram-generator.enable = true;
+  # services.zram-generator.settings = {
+  #
+  #   };
 
   users.users.guinaifen = {
     isNormalUser = true;
@@ -85,6 +88,7 @@
   nixpkgs.config.allowUnfreePredicate = _: true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.trusted-users = [ "guinaifen" ];
 
   environment.systemPackages = with pkgs; [
     git
@@ -136,12 +140,7 @@
   programs.fish.enable = true;
   programs.dconf.enable = true;
 
-  programs.steam = {
-    enable = true;
-    extraCompatPackages = [
-      inputs.nix-gaming.packages.${pkgs.system}.proton-ge
-    ];
-  };
+  programs.steam.enable = true;
   programs.gamemode.enable = true;
 
   programs.adb.enable = true;
