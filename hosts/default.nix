@@ -48,6 +48,8 @@
 
   services.printing.enable = false;
   services.flatpak.enable = true;
+  
+  services.ratbagd.enable = true;
 
   sound.enable = true;
   hardware.pulseaudio.enable = false;
@@ -85,6 +87,7 @@
     curl
     gnome.gnome-tweaks
     pkgs-unstable.input-remapper
+    pkgs-unstable.piper
   ];
 
   nixpkgs.config.packageOverrides = pkgs: {

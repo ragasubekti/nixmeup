@@ -1,5 +1,5 @@
 {
-  lib, pkgs, ...
+  lib, pkgs, pkgs-unstable, ...
 }: {
   home.packages = with pkgs; [
     kitty
@@ -47,6 +47,19 @@
 
     du-dust
     tealdeer
+
+    wl-clipboard
+    xclip
+
+    pkgs-unstable.gnome.gnome-boxes
+    pkgs-unstable.virt-manager
+
+    sqlitebrowser
+    duperemove
+    rmlint
+    trash-cli
+
+    distrobox
   ];
 
   programs = {
