@@ -1,10 +1,10 @@
 {
-  lib, pkgs, pkgs-unstable, ...
+  lib, pkgs-unstable, ...
 }: {
-  home.packages = [
-    pkgs.calibre
-    pkgs.koreader
-    pkgs.mangal
-    pkgs-unstable.foliate
+  home.packages = with pkgs-unstable; [
+    calibre
+    koreader
+    mangal
+    foliate
   ];
 }

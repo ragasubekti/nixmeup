@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, pkgs-unstable, ... }:
 
 {
   imports =
@@ -34,12 +34,14 @@
     LC_TIME = "ja_JP.UTF-8";
   };
 
-  services.xserver.enable = true;
-
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
   services.xserver = {
+    enable = true;
+    
+    displayManager.gdm.enable = true;
+    
+    desktopManager.gnome.enable = true;
+    displayManager.defaultSession = "gnome";
+    
     layout = "us";
     xkbVariant = "";
   };
@@ -72,6 +74,8 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfreePredicate = _: true;
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   environment.systemPackages = with pkgs; [
@@ -80,6 +84,7 @@
     wget
     curl
     gnome.gnome-tweaks
+    pkgs-unstable.input-remapper
   ];
 
   nixpkgs.config.packageOverrides = pkgs: {
@@ -95,6 +100,12 @@
       libvdpau-va-gl
     ];
   };
+
+  environment.sessionVariables = { 
+    LIBVA_DRIVER_NAME = "iHD";
+    NIXOS_OZONE_WL = "1";
+  };
+
   hardware.logitech.wireless = {
     enable = true;
     enableGraphical = true;

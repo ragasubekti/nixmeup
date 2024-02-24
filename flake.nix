@@ -38,13 +38,14 @@
   outputs = { self, nixpkgs, home-manager, nur, aagl, nixpkgs-unstable, ... }@inputs:
     let
       system = "x86_64-linux";
-      pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+      pkgs-unstable = import nixpkgs-unstable { inherit system; config = { allowUnfree = true; }; };
+      aagl-nix = aagl.packages.${system};
     in
     {
       nixosConfigurations.starward = nixpkgs.lib.nixosSystem {
         inherit system;
 
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs pkgs-unstable; };
 
         modules = [
           ./hosts
@@ -54,11 +55,9 @@
               nur.overlay
               (final: prev: { adw-gtk3 = prev.callPackage ./adw-gtk.nix {}; })
             ];
+
             imports = [ aagl.nixosModules.default ];
             nix.settings = aagl.nixConfig;
-
-            programs.honkers-railway-launcher.enable = true;
-            programs.anime-game-launcher.enable = true;
           }
 
           home-manager.nixosModules.home-manager
@@ -66,7 +65,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
-            home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable; };
+            home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable aagl-nix; };
             home-manager.users.guinaifen = import ./home;
           }
         ];

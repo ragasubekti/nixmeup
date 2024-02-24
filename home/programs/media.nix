@@ -1,5 +1,5 @@
 {
-  lib, pkgs, ...
+  lib, pkgs, pkgs-unstable, ...
 }: {
   home.packages = with pkgs; [
     ffmpeg-full
@@ -9,9 +9,11 @@
     vlc
     celluloid
 
-    yt-dlp
-    gallery-dl
-    imgbrd-grabber
+    pkgs-unstable.yt-dlp
+    pkgs-unstable.gallery-dl
+    pkgs-unstable.imgbrd-grabber
+
+    pkgs-unstable.easyeffects
   ];
 
   programs = {

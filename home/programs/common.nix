@@ -44,6 +44,9 @@
 
     rustup
     adw-gtk3
+
+    du-dust
+    tealdeer
   ];
 
   programs = {

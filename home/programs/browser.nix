@@ -2,6 +2,7 @@
   pkgs,
   config,
   inputs,
+  pkgs-unstable,
   ...
 }: {
   programs = {
@@ -23,10 +24,17 @@
         ];
       };
     };
+
   };
 
   home.packages = [
     pkgs.discord
     pkgs.telegram-desktop
+    pkgs.thunderbird
+
+    (pkgs.vivaldi.override {
+      proprietaryCodecs = true;
+      enableWidevine = true;
+    })
   ];
 }
