@@ -25,6 +25,8 @@
     qbittorrent
 
     imagemagick
+    scrcpy
+    pipx
   ];
 
   programs = {

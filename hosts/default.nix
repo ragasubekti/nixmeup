@@ -67,8 +67,8 @@
   users.users.guinaifen = {
     isNormalUser = true;
     description = "Guinaifen";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
+    extraGroups = [ "networkmanager" "wheel" "adbusers" ];
+    shell = pkgs.fish;
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -111,6 +111,8 @@
     ];
   };
   programs.gamemode.enable = true;
+
+  programs.adb.enable = true;
 
   system.stateVersion = "23.11";
 }
