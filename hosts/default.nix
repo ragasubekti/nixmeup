@@ -1,14 +1,19 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
     [
       ./hardware-configuration.nix
       ./virtualization.nix
+      inputs.nix-gaming.nixosModules.pipewireLowLatency
+      inputs.nix-gaming.nixosModules.steamCompat
     ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_xanmod;
+
+  boot.kernelParams = [ "i915.enable_guc=2" ];
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
@@ -40,15 +45,23 @@
   };
 
   services.printing.enable = false;
+  services.flatpak.enable = true;
 
   sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+
+    lowLatency = {
+      enable = true;
+      quantum = 64;
+      rate = 48000;
+    };
   };
 
   users.users.guinaifen = {
@@ -72,6 +85,7 @@
   nixpkgs.config.packageOverrides = pkgs: {
     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
   };
+
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
@@ -84,6 +98,14 @@
 
   programs.fish.enable = true;
   programs.dconf.enable = true;
+
+  programs.steam = {
+    enable = true;
+    extraCompatPackages = [
+      inputs.nix-gaming.packages.${pkgs.system}.proton-ge
+    ];
+  };
+  programs.gamemode.enable = true;
 
   system.stateVersion = "23.11";
 }

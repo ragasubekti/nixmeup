@@ -5,5 +5,6 @@
     ./common.nix
     ./git.nix
     ./media.nix
+    ./games.nix
   ];
 }

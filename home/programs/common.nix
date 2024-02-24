@@ -5,6 +5,7 @@
     xdg-utils
     fzf
     clifm
+    fd
 
     zip
     unzip
@@ -21,6 +22,9 @@
     pgcli
 
     keepassxc
+    qbittorrent
+
+    imagemagick
   ];
 
   programs = {

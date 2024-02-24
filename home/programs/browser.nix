@@ -24,4 +24,9 @@
       };
     };
   };
+
+  home.packages = [
+    pkgs.discord
+    pkgs.telegram-desktop
+  ];
 }
