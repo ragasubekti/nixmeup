@@ -37,10 +37,14 @@
   services.xserver = {
     enable = true;
     
-    displayManager.gdm.enable = true;
+    # GNOME
+    # displayManager.gdm.enable = true;
     
-    desktopManager.gnome.enable = true;
-    displayManager.defaultSession = "gnome";
+    # desktopManager.gnome.enable = true;
+    # displayManager.defaultSession = "gnome";
+
+    displayManager.sddm.enable = true;
+    desktopManager.plasma5.enable = true;
     
     layout = "us";
     xkbVariant = "";
@@ -114,6 +118,7 @@
     enableGraphical = true;
   };
   hardware.bluetooth.enable = true;
+  zramSwap.enable = true;
 
   programs.fish.enable = true;
   programs.dconf.enable = true;
