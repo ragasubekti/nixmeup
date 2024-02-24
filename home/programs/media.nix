@@ -2,10 +2,10 @@
   lib, pkgs, pkgs-unstable, ...
 }: {
   home.packages = with pkgs; [
-    ffmpeg-full
+    pkgs-unstable.ffmpeg-full
     opusTools
     opustags
-    handbrake
+    pkgs-unstable.handbrake
     vlc
     celluloid
 

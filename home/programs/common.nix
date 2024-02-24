@@ -3,6 +3,7 @@
 }: {
   home.packages = with pkgs; [
     kitty
+    nnn
 
     xdg-utils
     fzf
@@ -43,6 +44,7 @@
     flutter
 
     rustup
+
     adw-gtk3
 
     du-dust
@@ -73,4 +75,14 @@
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
+
+  programs.foot = {
+      enable = true;
+      settings = {
+        main = {
+          term = "xterm-256color";
+          font = "CaskaydiaCove Nerd Font Mono:size=12";
+        };
+      };
+    };
 }

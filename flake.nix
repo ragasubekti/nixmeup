@@ -26,7 +26,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nur.url = github:nix-community/NUR;
+    nur.url = "github:nix-community/NUR";
     nix-gaming.url = "github:fufexan/nix-gaming";
 
     aagl = {
@@ -38,7 +38,9 @@
   outputs = { self, nixpkgs, home-manager, nur, aagl, nixpkgs-unstable, ... }@inputs:
     let
       system = "x86_64-linux";
+
       pkgs-unstable = import nixpkgs-unstable { inherit system; config = { allowUnfree = true; }; };
+      pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
       aagl-nix = aagl.packages.${system};
     in
     {
@@ -49,11 +51,16 @@
 
         modules = [
           ./hosts
+          
 
           {
             nixpkgs.overlays = [ 
               nur.overlay
-              (final: prev: { adw-gtk3 = prev.callPackage ./adw-gtk.nix {}; })
+              (final: prev: { adw-gtk3 = prev.callPackage ./overlays/adw-gtk.nix {}; })
+              (final: prev: { wallpaper-engine-kde = pkgs.plasma5Packages.callPackage ./overlays/wallpaper-engine-kde.nix {
+                inherit (pkgs.gst_all_1) gst-libav;
+                inherit (pkgs.python3Packages) websockets;
+              }; })
             ];
 
             imports = [ aagl.nixosModules.default ];

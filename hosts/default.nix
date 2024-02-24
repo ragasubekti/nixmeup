@@ -1,5 +1,4 @@
 { config, pkgs, inputs, pkgs-unstable, ... }:
-
 {
   imports =
     [
@@ -72,6 +71,9 @@
     };
   };
 
+
+  services.zram-generator.enable = true;
+
   users.users.guinaifen = {
     isNormalUser = true;
     description = "Guinaifen";
@@ -89,9 +91,20 @@
     vim
     wget
     curl
-    gnome.gnome-tweaks
+
+    # gnome.gnome-tweaks
+    
     pkgs-unstable.input-remapper
-    pkgs-unstable.piper
+    pkgs-unstable.pipewire
+    
+    libsForQt5.qt5.qtwebsockets
+
+
+    (pkgs.python3.withPackages (python-pkgs: [
+      python-pkgs.websockets
+    ]))
+
+    wallpaper-engine-kde
   ];
 
   nixpkgs.config.packageOverrides = pkgs: {
@@ -118,7 +131,7 @@
     enableGraphical = true;
   };
   hardware.bluetooth.enable = true;
-  zramSwap.enable = true;
+
 
   programs.fish.enable = true;
   programs.dconf.enable = true;
