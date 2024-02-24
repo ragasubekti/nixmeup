@@ -23,14 +23,16 @@
   fonts.fontconfig.enable = true;
 
   programs.home-manager.enable = true;
+
   programs.fish = {
     enable = true;
-    plugins = [
-      pkgs.fishPlugins.z
-      pkgs.fishPlugins.fzf-fish
-      pkgs.fishPlugins.done
-    ];
   };
+
+  home.sessionPath = [
+    "$HOME/.local/bin"
+    "$HOME/.cargo/bin"
+    "$HOME/Android/Sdk/platform-tools"
+  ];
 
   systemd.user.startServices = "sd-switch";
 }
