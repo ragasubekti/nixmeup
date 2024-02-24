@@ -2,6 +2,8 @@
   lib, pkgs, ...
 }: {
   home.packages = with pkgs; [
+    kitty
+
     xdg-utils
     fzf
     clifm
@@ -27,6 +29,18 @@
     imagemagick
     scrcpy
     pipx
+    neovim
+
+    stdenvNoCC
+    gcc
+
+    dotnet-sdk_8
+
+    gnumake
+    cmake
+
+    android-studio
+    flutter
   ];
 
   programs = {

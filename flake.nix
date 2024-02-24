@@ -35,16 +35,20 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, aagl, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, nur, aagl, nixpkgs-unstable, ... }@inputs: 
+  let
+    system = "x86_64-linux";
+    pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+  in {
     nixosConfigurations.starward = nixpkgs.lib.nixosSystem {
-      specialArgs = {inherit inputs;};
+      inherit system;
 
-      system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
 
       modules = [
         ./hosts
 
-        { 
+        {
           nixpkgs.overlays = [ nur.overlay ];
           imports = [ aagl.nixosModules.default ];
           nix.settings = aagl.nixConfig;
@@ -58,7 +62,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
-            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable; };
             home-manager.users.guinaifen = import ./home;
           }
       ];

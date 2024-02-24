@@ -8,6 +8,10 @@
     handbrake
     vlc
     celluloid
+
+    yt-dlp
+    gallery-dl
+    imgbrd-grabber
   ];
 
   programs = {
