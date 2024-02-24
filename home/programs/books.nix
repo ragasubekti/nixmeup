@@ -1,7 +1,5 @@
-{
-  lib, pkgs-unstable, ...
-}: {
-  home.packages = with pkgs-unstable; [
+{ lib, pkgs, ... }: {
+  home.packages = with pkgs; [
     calibre
     koreader
     mangal

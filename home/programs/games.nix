@@ -1,11 +1,14 @@
 {
-  lib, pkgs, inputs, pkgs-unstable, ...
+  lib, pkgs, inputs, ...
 }: {
   home.packages = [
-    inputs.nix-gaming.packages.${pkgs.hostPlatform.system}.osu-lazer-bin
-    inputs.nix-gaming.packages.${pkgs.hostPlatform.system}.osu-stable
+    # Use Flatpak Instead
+    
+    # inputs.nix-gaming.packages.${pkgs.hostPlatform.system}.osu-lazer-bin
+    # inputs.nix-gaming.packages.${pkgs.hostPlatform.system}.osu-stable
 
-    pkgs-unstable.lutris
-    pkgs-unstable.bottles
+    
+    # lutris
+    # bottles
   ];
 }

@@ -8,37 +8,19 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/d52575e8-1347-42d7-a8a4-256731038519";
+    { device = "/dev/disk/by-uuid/9305e880-e7e8-47b1-99d3-41edd5a9317c";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/242A-9227";
+    { device = "/dev/disk/by-uuid/0EEE-5512";
       fsType = "vfat";
-    };
-
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/48444e2c-e8f0-4a45-bfea-99ed67fb9ac7";
-      fsType = "btrfs";
-      options = [ "noatime" "lazytime" "compress=zstd" ];
-    };
-
-  fileSystems."/mnt/hdd" =
-    { device = "/dev/disk/by-uuid/999658fe-a8e0-4f12-9b40-f24932a303d6";
-      fsType = "btrfs";
-      options = [ "noatime" "lazytime" "compress=zstd" ];
-    };
-
-  fileSystems."/mnt/games" =
-    { device = "/dev/disk/by-uuid/bbc5a71c-af08-4d0a-a84d-509ca06f0356";
-      fsType = "btrfs";
-      options = [ "noatime" "lazytime" "compress=zstd" ];
     };
 
   swapDevices = [ ];

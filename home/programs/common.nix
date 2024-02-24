@@ -1,10 +1,9 @@
 {
-  lib, pkgs, pkgs-unstable, ...
+  lib, pkgs, ...
 }: {
   home.packages = with pkgs; [
-    # kitty
     nnn
-    pkgs-unstable.fastfetch
+    fastfetch
 
     xdg-utils
     fzf
@@ -54,8 +53,8 @@
     wl-clipboard
     xclip
 
-    pkgs-unstable.gnome.gnome-boxes
-    pkgs-unstable.virt-manager
+    gnome.gnome-boxes
+    virt-manager
 
     sqlitebrowser
     duperemove
@@ -64,9 +63,10 @@
 
     distrobox
 
-    pkgs-unstable.emacs-nox
+    emacs-nox
 
     nil
+    vscode
   ];
 
   programs = {

@@ -18,62 +18,69 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nur.url = "github:nix-community/NUR";
     nix-gaming.url = "github:fufexan/nix-gaming";
-
-    aagl = {
-      url = "github:ezKEa/aagl-gtk-on-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, aagl, nixpkgs-unstable, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nur, nixpkgs-stable, ... }@inputs:
     let
       system = "x86_64-linux";
 
-      pkgs-unstable = import nixpkgs-unstable { inherit system; config = { allowUnfree = true; }; };
       pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
-      # aagl-nix = aagl.packages.${system};
+
     in
     {
-      nixosConfigurations.starward = nixpkgs.lib.nixosSystem {
+      home-manager.nixosModules.home-manager = {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+
+        home-manager.extraSpecialArgs = { inherit inputs; };
+        home-manager.users.guinaifen = import ./home;
+      };
+
+      nixpkgs.overlays = with pkgs; [
+        nur.overlay
+        (final: prev: {
+          wallpaper-engine-kde = plasma5Packages.callPackage ./overlays/wallpaper-engine-kde.nix {
+            inherit (gst_all_1) gst-libav; 
+            inherit (python3Packages) websockets; 
+          };
+        })
+        (final: prev: { adw-gtk3 = prev.callPackage ./overlays/adw-gtk.nix {}; })
+      ];
+
+      nixosConfigurations.xianzhou = nixpkgs.lib.nixosSystem {
         inherit system;
 
-        specialArgs = { inherit inputs pkgs-unstable; };
+        specialArgs = { inherit inputs; };
 
         modules = [
           ./hosts
+          ./hosts/plasma.nix
+          
+          home-manager.nixosModules.home-manager 
+        ];
 
-          {
-            nixpkgs.overlays = [ 
-              nur.overlay
-              (final: prev: { adw-gtk3 = prev.callPackage ./overlays/adw-gtk.nix {}; })
-              (final: prev: { wallpaper-engine-kde = pkgs.plasma5Packages.callPackage ./overlays/wallpaper-engine-kde.nix {
-                inherit (pkgs.gst_all_1) gst-libav;
-                inherit (pkgs.python3Packages) websockets;
-              }; })
-            ];
+      };
 
-            # imports = [ aagl.nixosModules.default ];
-            # nix.settings = aagl.nixConfig;
-          }
+      nixosConfigurations.liyue = nixpkgs.lib.nixosSystem {
+        inherit system;
 
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+        specialArgs = { inherit inputs; };
 
-            home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable; };
-            home-manager.users.guinaifen = import ./home;
-          }
+        modules = [
+          ./hosts
+          ./hosts/gnome.nix
+
+          home-manager.nixosModules.home-manager 
         ];
 
       };

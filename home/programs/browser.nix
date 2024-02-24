@@ -1,19 +1,6 @@
+{ pkgs, config, inputs, ...}: 
 {
-  pkgs,
-  config,
-  inputs,
-  pkgs-unstable,
-  ...
-}: {
   programs = {
-    chromium = {
-      enable = true;
-      commandLineArgs = ["--enable-features=TouchpadOverscrollHistoryNavigation"];
-      extensions = [
-        
-      ];
-    };
-
     firefox = {
       enable = true;
       profiles.guinaifen = {
@@ -32,7 +19,7 @@
     pkgs.telegram-desktop
     pkgs.thunderbird
 
-    (pkgs-unstable.vivaldi.override {
+    (pkgs.vivaldi.override {
       proprietaryCodecs = true;
       enableWidevine = true;
     })

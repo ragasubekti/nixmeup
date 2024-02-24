@@ -1,19 +1,20 @@
-{
-  lib, pkgs, pkgs-unstable, ...
-}: {
+{ lib, pkgs, ... }: {
   home.packages = with pkgs; [
-    pkgs-unstable.ffmpeg-full
+    ffmpeg-full
     opusTools
     opustags
-    pkgs-unstable.handbrake
+
+    # Disabled no HWA
+    # handbrake 
+    
     vlc
     celluloid
 
-    pkgs-unstable.yt-dlp
-    pkgs-unstable.gallery-dl
-    pkgs-unstable.imgbrd-grabber
+    yt-dlp
+    gallery-dl
+    imgbrd-grabber
 
-    pkgs-unstable.easyeffects
+    easyeffects
   ];
 
   programs = {
