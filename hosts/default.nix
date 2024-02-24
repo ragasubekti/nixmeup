@@ -95,6 +95,11 @@
       libvdpau-va-gl
     ];
   };
+  hardware.logitech.wireless = {
+    enable = true;
+    enableGraphical = true;
+  };
+  hardware.bluetooth.enable = true;
 
   programs.fish.enable = true;
   programs.dconf.enable = true;

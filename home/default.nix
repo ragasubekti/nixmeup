@@ -23,5 +23,14 @@
   fonts.fontconfig.enable = true;
 
   programs.home-manager.enable = true;
+  programs.fish = {
+    enable = true;
+    plugins = [
+      pkgs.fishPlugins.z
+      pkgs.fishPlugins.fzf-fish
+      pkgs.fishPlugins.done
+    ];
+  };
+
   systemd.user.startServices = "sd-switch";
 }
