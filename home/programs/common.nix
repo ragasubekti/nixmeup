@@ -41,6 +41,9 @@
 
     android-studio
     flutter
+
+    rustup
+    adw-gtk3
   ];
 
   programs = {

@@ -1,6 +1,6 @@
 {
   description = "Yeet The Child";
-  
+
   nixConfig = {
     substituters = [
       "https://cache.nixos.org"
@@ -35,29 +35,33 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, aagl, nixpkgs-unstable, ... }@inputs: 
-  let
-    system = "x86_64-linux";
-    pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
-  in {
-    nixosConfigurations.starward = nixpkgs.lib.nixosSystem {
-      inherit system;
+  outputs = { self, nixpkgs, home-manager, nur, aagl, nixpkgs-unstable, ... }@inputs:
+    let
+      system = "x86_64-linux";
+      pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+    in
+    {
+      nixosConfigurations.starward = nixpkgs.lib.nixosSystem {
+        inherit system;
 
-      specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs; };
 
-      modules = [
-        ./hosts
+        modules = [
+          ./hosts
 
-        {
-          nixpkgs.overlays = [ nur.overlay ];
-          imports = [ aagl.nixosModules.default ];
-          nix.settings = aagl.nixConfig;
+          {
+            nixpkgs.overlays = [ 
+              nur.overlay
+              (final: prev: { adw-gtk3 = prev.callPackage ./adw-gtk.nix {}; })
+            ];
+            imports = [ aagl.nixosModules.default ];
+            nix.settings = aagl.nixConfig;
 
-          programs.honkers-railway-launcher.enable = true;
-          programs.anime-game-launcher.enable = true;
-        }
+            programs.honkers-railway-launcher.enable = true;
+            programs.anime-game-launcher.enable = true;
+          }
 
-        home-manager.nixosModules.home-manager
+          home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
@@ -65,7 +69,7 @@
             home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable; };
             home-manager.users.guinaifen = import ./home;
           }
-      ];
+        ];
+      };
     };
-  };
 }
