@@ -1,12 +1,11 @@
 {
-  lib, pkgs, ...
+  lib, pkgs, pkgs-stable, inputs, ...
 }: {
   home.packages = with pkgs; [
     nnn
     fastfetch
 
     xdg-utils
-    fzf
     clifm
     fd
 
@@ -67,7 +66,14 @@
 
     nil
     vscode
-    zellij
+
+    onlyoffice-bin
+    calibre-web
+    pkgs-stable.obsidian
+
+    cached-nix-shell
+    deja-dup
+    pika-backup
   ];
 
   programs = {
@@ -77,12 +83,19 @@
     jq.enable = true;
     ssh.enable = true;
     aria2.enable = true;
-  };
 
-  programs.direnv.enable = true;
-  programs.direnv.nix-direnv.enable = true;
+    zellij = {
+      enable = true;
+      enableFishIntegration = true;
+    };
 
-  programs.foot = {
+    fzf = {
+      enable = true;
+      enableFishIntegration = true;
+      defaultCommand = "fd --type f";
+    };
+
+    foot = {
       enable = true;
       settings = {
         main = {
@@ -91,4 +104,14 @@
         };
       };
     };
+
+    direnv = {
+      enable = true; 
+      nix-direnv.enable = true;
+    };
+
+    alacritty = {
+      enable = true;
+    };
+  };
 }

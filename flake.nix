@@ -28,13 +28,17 @@
 
     nur.url = "github:nix-community/NUR";
     nix-gaming.url = "github:fufexan/nix-gaming";
+
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    nix-software-center.url = "github:snowfallorg/nix-software-center";
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, nixpkgs-stable, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nur, nixpkgs-stable, chaotic, ... }@inputs:
     let
       system = "x86_64-linux";
 
       pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
+      pkgs-stable = import nixpkgs-stable { inherit system; config = { allowUnfree = true; permittedInsecurePackages = [ "electron-25.9.0" ]; }; };
     in
     {
 
@@ -47,7 +51,7 @@
         modules = [
           ./hosts
           ./hosts/plasma.nix
-          
+
           {
             nixpkgs.overlays = with pkgs; [
               nur.overlay
@@ -65,7 +69,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
-            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.extraSpecialArgs = { inherit inputs pkgs-stable; };
             home-manager.users.guinaifen = import ./home;
           }
         ];
@@ -78,6 +82,8 @@
         specialArgs = { inherit inputs; };
 
         modules = [
+          chaotic.nixosModules.default 
+          
           ./hosts
           ./hosts/gnome.nix
 
@@ -98,7 +104,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
-            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.extraSpecialArgs = { inherit inputs pkgs-stable; };
             home-manager.users.guinaifen = import ./home;
           }
         ];

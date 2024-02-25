@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   services.xserver = {
@@ -28,5 +28,7 @@
     
     input-remapper
     wl-clipboard
+
+    inputs.nix-software-center.packages.${system}.nix-software-center
   ];
 }
