@@ -67,6 +67,7 @@
 
     nil
     vscode
+    zellij
   ];
 
   programs = {

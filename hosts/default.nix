@@ -35,8 +35,6 @@
 
   services.printing.enable = false;
   services.flatpak.enable = true;
-
-  fonts.fontDir.enable = true;
   
   services.ratbagd.enable = true;
 
@@ -74,6 +72,8 @@
 
   fonts = {
     enableDefaultPackages = true;
+    fontDir.enable = true;
+
     packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk
@@ -89,6 +89,31 @@
       sansSerif = [ "Noto Sans" ];
       monospace = [ "CaskaydiaCove Nerd Font Mono" ];
     };
+  };
+
+  # Fix Flatpak cannot access System Fonts
+  system.fsPackages = [ pkgs.bindfs ];
+  fileSystems = let
+    mkRoSymBind = path: {
+      device = path;
+      fsType = "fuse.bindfs";
+      options = [ "ro" "resolve-symlinks" "x-gvfs-hide" ];
+    };
+    aggregatedIcons = pkgs.buildEnv {
+      name = "system-icons";
+      paths = with pkgs; [
+        gnome.gnome-themes-extra
+      ];
+      pathsToLink = [ "/share/icons" ];
+    };
+    aggregatedFonts = pkgs.buildEnv {
+      name = "system-fonts";
+      paths = config.fonts.packages;
+      pathsToLink = [ "/share/fonts" ];
+    };
+  in {
+    "/usr/share/icons" = mkRoSymBind "${aggregatedIcons}/share/icons";
+    "/usr/local/share/fonts" = mkRoSymBind "${aggregatedFonts}/share/fonts";
   };
 
 

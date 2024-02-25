@@ -35,38 +35,39 @@
       system = "x86_64-linux";
 
       pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
-
     in
     {
-      home-manager.nixosModules.home-manager = {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-
-        home-manager.extraSpecialArgs = { inherit inputs; };
-        home-manager.users.guinaifen = import ./home;
-      };
-
-      nixpkgs.overlays = with pkgs; [
-        nur.overlay
-        (final: prev: {
-          wallpaper-engine-kde = plasma5Packages.callPackage ./overlays/wallpaper-engine-kde.nix {
-            inherit (gst_all_1) gst-libav; 
-            inherit (python3Packages) websockets; 
-          };
-        })
-        (final: prev: { adw-gtk3 = prev.callPackage ./overlays/adw-gtk.nix {}; })
-      ];
 
       nixosConfigurations.xianzhou = nixpkgs.lib.nixosSystem {
         inherit system;
 
         specialArgs = { inherit inputs; };
+        
 
         modules = [
           ./hosts
           ./hosts/plasma.nix
           
-          home-manager.nixosModules.home-manager 
+          {
+            nixpkgs.overlays = with pkgs; [
+              nur.overlay
+              (final: prev: {
+                wallpaper-engine-kde = plasma5Packages.callPackage ./overlays/wallpaper-engine-kde.nix {
+                  inherit (gst_all_1) gst-libav; 
+                  inherit (python3Packages) websockets; 
+                };
+              })
+              (final: prev: { adw-gtk3 = prev.callPackage ./overlays/adw-gtk.nix {}; })
+            ];
+          }
+
+          home-manager.nixosModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+
+            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.users.guinaifen = import ./home;
+          }
         ];
 
       };
@@ -80,7 +81,26 @@
           ./hosts
           ./hosts/gnome.nix
 
-          home-manager.nixosModules.home-manager 
+          {
+            nixpkgs.overlays = with pkgs; [
+              nur.overlay
+              (final: prev: {
+                wallpaper-engine-kde = plasma5Packages.callPackage ./overlays/wallpaper-engine-kde.nix {
+                  inherit (gst_all_1) gst-libav; 
+                  inherit (python3Packages) websockets; 
+                };
+              })
+              (final: prev: { adw-gtk3 = prev.callPackage ./overlays/adw-gtk.nix {}; })
+            ];
+          }
+
+          home-manager.nixosModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+
+            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.users.guinaifen = import ./home;
+          }
         ];
 
       };
