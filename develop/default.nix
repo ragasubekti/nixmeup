@@ -1,10 +1,17 @@
 { pkgs, ... }: {
   dotnet8 = pkgs.mkShell {
     packages = with pkgs; [
-      dotnet-sdk_8
-      dotnet-runtime_8
+      stdenvNoCC
       SDL2
-      ffmpeg-full
+      ffmpeg_4
+      icu
+      libkrb5
+      lttng-ust
+      numactl
+      openssl
+      vulkan-loader
+      dotnet-sdk_8
+
       nushell
     ];
 
@@ -12,4 +19,6 @@
       exec nu
     '';
   };
+
+  android = pkgs.mkShell { packages = with pkgs; [ android-studio flutter ]; };
 }

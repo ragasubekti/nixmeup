@@ -40,7 +40,7 @@
     let
       system = "x86_64-linux";
       home-user = "guinaifen";
-      
+
       pkgs-stable = import nixpkgs-stable {
         inherit system;
         config = { allowUnfree = true; };
@@ -98,6 +98,6 @@
 
       };
 
-      devShells.${system} = import ./develop;
+      # devShells.${system} = import ./develop { inherit pkgs; };
     };
 }

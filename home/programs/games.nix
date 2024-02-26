@@ -43,8 +43,7 @@ in {
 
   services.flatpak.overrides = {
     global = {
-      # Force Wayland by default
-      Context.sockets = [ "wayland" "!x11" "!fallback-x11" ];
+      Context.sockets = [ "wayland" "!x11" "fallback-x11" ];
 
       Environment = {
         XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
@@ -58,11 +57,8 @@ in {
 
   home.packages = [
     nix-gaming.osu-lazer-bin
-    (nix-gaming.osu-stable.override rec {
-      wine = nix-gaming.wine-tkg;
+    (nix-gaming.osu-stable.override {
       location = "${config.home.homeDirectory}/games/osu-nix";
-      wine-discord-ipc-bridge =
-        nix-gaming.wine-discord-ipc-bridge.override { inherit wine; };
     })
 
     pkgs.yuzu

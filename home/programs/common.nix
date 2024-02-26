@@ -12,33 +12,34 @@
     unar
     p7zip
 
-    nodejs
-    nodePackages.npm
-    nodePackages.pnpm
-    yarn
+    # nodejs
+    # nodePackages.npm
+    # nodePackages.pnpm
+    # yarn
 
     dbeaver
-    pgcli
+    # pgcli
 
     keepassxc
     qbittorrent
 
     imagemagick
     scrcpy
-    pipx
+    adb-sync
+    # pipx
 
-    stdenvNoCC
-    gcc
+    # stdenvNoCC
+    # gcc
 
-    dotnet-sdk_8
+    # dotnet-sdk_8
 
-    gnumake
-    cmake
+    # gnumake
+    # cmake
 
     # android-studio
     # flutter
 
-    rustup
+    # rustup
 
     adw-gtk3
 
@@ -58,7 +59,7 @@
 
     distrobox
 
-    # onlyoffice-bin
+    onlyoffice-bin
     calibre-web
 
     cached-nix-shell
