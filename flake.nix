@@ -31,12 +31,17 @@
     nix-gaming.url = "github:fufexan/nix-gaming";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     nix-software-center.url = "github:snowfallorg/nix-software-center";
-    nix-flatpak.url = "github:gmodena/nix-flatpak";
-    # sops-nix.url = "github:Mic92/sops-nix";
+
+    aagl = {
+      url = "github:ezKEa/aagl-gtk-on-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, nixpkgs-stable, chaotic
-    , nix-flatpak, ... }@inputs:
+  outputs =
+    { self, nixpkgs, home-manager, nur, nixpkgs-stable, chaotic, ... }@inputs:
     let
       system = "x86_64-linux";
       home-user = "guinaifen";
@@ -56,7 +61,6 @@
         home-manager.users.${home-user} = import ./home;
       };
     in {
-
       nixosConfigurations.xianzhou = nixpkgs.lib.nixosSystem {
         inherit system;
 
@@ -64,7 +68,6 @@
 
         modules = [
           chaotic.nixosModules.default
-          nix-flatpak.nixosModules.nix-flatpak
 
           ./hosts
           ./hosts/plasma.nix
@@ -84,20 +87,23 @@
 
         modules = [
           chaotic.nixosModules.default
-          nix-flatpak.nixosModules.nix-flatpak
-          # sops-nix.nixosModules.sops
+          inputs.sops-nix.nixosModules.sops
 
           ./hosts
           ./hosts/gnome.nix
 
           ./overlays
 
+          {
+            imports = [ inputs.aagl.nixosModules.default ];
+            nix.settings = inputs.aagl.nixConfig;
+            programs.anime-game-launcher.enable = true;
+            programs.honkers-railway-launcher.enable = true;
+          }
+
           home-manager.nixosModules.home-manager
           home-manager-setting
         ];
-
       };
-
-      # devShells.${system} = import ./develop { inherit pkgs; };
     };
 }

@@ -1,5 +1,7 @@
 { config, inputs, home-user, ... }: {
-  imports = [ ./programs inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
+  imports = [
+    ./programs
+  ];
 
   nixpkgs.config = {
     allowUnfree = true;

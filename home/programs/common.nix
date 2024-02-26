@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }: {
+{ config, pkgs, inputs, ... }: {
   home.packages = with pkgs; [
     fastfetch
 
@@ -43,7 +43,7 @@
 
     adw-gtk3
 
-    du-dust
+    dust
     tealdeer
 
     wl-clipboard
@@ -65,8 +65,9 @@
     cached-nix-shell
     deja-dup
     pika-backup
+    resources
 
-    inputs.nix-software-center.packages.${system}.nix-software-center
+    # inputs.nix-software-center.packages.${system}.nix-software-center
   ];
 
   programs = {
@@ -109,5 +110,21 @@
       enable = true;
       nix-direnv.enable = true;
     };
+
+    # borgmatic = {
+    #   enable = true;
+    #   backups = {
+    #     home-dir = {
+    #       location.repository = [{
+    #         path = "/mnt/hdd/backup/borgmatic/home.borg";
+    #         label = "local";
+    #       }];
+    #       location.source = config.home.homeDirectory;
+
+    #       location.excludeHomeManagerSymlinks = true;
+
+    #     };
+    #   };
+    # };
   };
 }

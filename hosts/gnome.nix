@@ -14,6 +14,7 @@
   };
 
   xdg.portal.enable = true;
+  nixpkgs.config.allowAliases = false;
 
   environment.systemPackages = with pkgs; [
     git
@@ -26,5 +27,21 @@
 
     input-remapper
     wl-clipboard
+    lutris
+
+    gnome.adwaita-icon-theme
+    gnomeExtensions.appindicator
+    gnome.gnome-settings-daemon
+
+    # use overlay
+    gnome.mutter
   ];
+
+  systemd.extraConfig = ''
+    DefaultLimitNOFILE=1048576
+  '';
+
+  systemd.user.extraConfig = ''
+    DefaultLimitNOFILE=1048576
+  '';
 }

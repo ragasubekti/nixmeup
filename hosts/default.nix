@@ -8,7 +8,7 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_cachyos;
+  boot.kernelPackages = pkgs.linuxPackages_xanmod;
 
   boot.kernelParams = [ "i915.enable_guc=2" ];
 
@@ -32,7 +32,6 @@
 
   services = {
     printing.enable = false;
-    flatpak.enable = true;
 
     ratbagd.enable = true;
   };
@@ -69,9 +68,9 @@
     allowUnfree = true;
     allowUnfreePredicate = _: true;
 
-    packageOverrides = pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-    };
+    #packageOverrides = pkgs: {
+    #  vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+    #};
   };
 
   nix = {
@@ -91,8 +90,10 @@
 
     packages = with pkgs; [
       noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+
+      noto-fonts-emoji-blob-bin
       liberation_ttf
       merriweather
 
@@ -141,10 +142,12 @@
       enable = true;
       extraPackages = with pkgs; [
         intel-media-driver
-        vaapiIntel
+        vaapi-intel-hybrid
         vaapiVdpau
         libvdpau-va-gl
       ];
+
+      driSupport32Bit = true;
     };
 
     logitech.wireless = {
@@ -163,6 +166,13 @@
     dconf.enable = true;
 
     gamemode.enable = true;
+    steam = {
+      enable = true;
+      remotePlay.openFirewall =
+        true; # Open ports in the firewall for Steam Remote Play
+      dedicatedServer.openFirewall =
+        true; # Open ports in the firewall for Source Dedicated Server
+    };
 
     adb.enable = true;
   };

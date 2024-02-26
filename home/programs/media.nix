@@ -16,10 +16,11 @@ in {
 
     easyeffects
     kid3
-    kdenlive
+    libsForQt5.kdenlive
     openshot-qt
     amberol
     libsForQt5.elisa
+    soundconverter
   ];
 
   programs = {
