@@ -1,6 +1,13 @@
 {
-  pkgs, inputs, ...
-}: {
+  config, pkgs, inputs, ...
+}: 
+let 
+  games-opts = {
+    filesystems = [
+      "home/.games:rw"
+    ];
+  };
+in {
   services.flatpak.enable = true;
   services.flatpak.update.auto.enable = false;
   services.flatpak.uninstallUnmanagedPackages = true;
@@ -38,17 +45,19 @@
       };
     };
 
-    "com.valvesoftware.Steam".Context = {
-      filesystems = [
-        "home/.games:rw"
-      ];
-    };
+    "com.valvesoftware.Steam".Context = games-opts;
+    "moe.launcher.an-anime-game-launcher".Context = games-opts;
+    "moe.launcher.the-honkers-railway-launcher".Context = games-opts;
   };
 
-  home.packages = [
+  home.packages = let nix-gaming = inputs.nix-gaming.packages.${pkgs.hostPlatform.system}; in [
     
-    inputs.nix-gaming.packages.${pkgs.hostPlatform.system}.osu-lazer-bin
-    inputs.nix-gaming.packages.${pkgs.hostPlatform.system}.osu-stable
+    nix-gaming.osu-lazer-bin
+    nix-gaming.osu-stable.override rec {
+      wine = nix-gaming.wine-tkg;
+      wine-discord-ipc-bridge = nix-gaming.wine-discord-ipc-bridge.override {inherit wine;};
+      location = "${config.home.homeDirectory}/games/osu-nix";
+    }
 
     pkgs.yuzu
     pkgs.rpcs3
