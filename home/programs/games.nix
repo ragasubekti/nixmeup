@@ -1,6 +1,6 @@
 { config, pkgs, inputs, ... }:
 let
-  games-opts = { filesystems = [ "home/.games:rw" ]; };
+  games-opts = { filesystems = [ "~/games:rw" ]; };
 
   nix-gaming = inputs.nix-gaming.packages.${pkgs.hostPlatform.system};
 in {

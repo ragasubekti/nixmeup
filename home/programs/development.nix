@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, lib, ... }: {
   home.packages = with pkgs; [ nil nixfmt shfmt shellcheck ];
 
   programs.emacs = {
@@ -7,25 +7,14 @@
     extraPackages = epkgs: [ epkgs.vterm ];
   };
 
+  home.activation.install-doom = lib.hm.dag.entryAfter [ "installPackages" ] ''
+    if ! [ -d "${config.xdg.configHome}/emacs" ]; then
+       PATH="${pkgs.git}/bin:${pkgs.openssh}/bin:$PATH"
+       $DRY_RUN_CMD git clone $VERBOSE_ARG --depth=1 --single-branch "https://github.com/doomemacs/doomemacs.git" "${config.xdg.configHome}/emacs"
+    fi
+  '';
+
   xdg.configFile = {
-    emacs = {
-      source = builtins.fetchGit {
-        url = "https://github.com/doomemacs/doomemacs";
-        rev = "98d753e1036f76551ccaa61f5c810782cda3b48a";
-      };
-
-      onChange = "${pkgs.writeShellScript "doom-change" ''
-        export DOOMDIR="${config.home.sessionVariables.DOOMDIR}"
-        export DOOMLOCALDIR="${config.home.sessionVariables.DOOMLOCALDIR}"
-
-        if [ ! -d "$DOOMLOCALDIR" ]; then
-          ${config.xdg.configHome}/emacs/bin/doom -y install
-        else
-          ${config.xdg.configHome}/emacs/bin/doom -y sync -u
-        fi
-      ''}";
-    };
-
     doom-config = {
       source = ../../dotfiles/doom;
       recursive = true;

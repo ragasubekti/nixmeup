@@ -47,6 +47,7 @@ in {
         embed-chapters = true;
         embed-thumbnail = true;
 
+        download-archive = "/mnt/hdd/media/youtube_download.txt";
         downloader = "aria2c";
       };
     };
