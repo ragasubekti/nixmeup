@@ -1,8 +1,3 @@
 { pkgs, ... }: {
-  home.packages = with pkgs; [
-    calibre
-    koreader
-    mangal
-    foliate
-  ];
+  home.packages = with pkgs; [ calibre koreader mangal foliate ];
 }

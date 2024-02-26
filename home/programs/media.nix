@@ -1,8 +1,6 @@
-{ pkgs, home, ... }:
-let
-  galleryDlPath = "/mnt/hdd/data/gallery-dl"; 
-in
-{
+{ pkgs, ... }:
+let galleryDlPath = "/mnt/hdd/data/gallery-dl";
+in {
   home.packages = with pkgs; [
     ffmpeg-full
     opusTools
@@ -10,7 +8,7 @@ in
 
     # Disabled no HWA
     # handbrake
-    
+
     vlc
     celluloid
 
@@ -25,9 +23,9 @@ in
   ];
 
   programs = {
-    mpv = { 
+    mpv = {
       enable = true;
-      defaultProfiles = ["gpu-hq"];
+      defaultProfiles = [ "gpu-hq" ];
       config = {
         hwdec = "auto";
         cache-default = 4000000;
@@ -48,7 +46,7 @@ in
         embed-metadata = true;
         embed-chapters = true;
         embed-thumbnail = true;
-        
+
         downloader = "aria2c";
       };
     };
@@ -61,31 +59,31 @@ in
       archive = "${galleryDlPath}/archive.sqlite3";
       archive-pragma = [ "journal_mode=WAL" "synchronous=NORMAL" ];
 
-      postprocessors = [
-        {
-          name = "metadata";
-          mode = "tags";
-          whitelist = ["danbooru" "moebooru" "sankaku"];
-        }
-      ];
+      postprocessors = [{
+        name = "metadata";
+        mode = "tags";
+        whitelist = [ "danbooru" "moebooru" "sankaku" ];
+      }];
 
-      kemonoparty.postprocessors = [
-        {
-          name= "metadata";
-          event = "post";
-          filename= "{id} {title}.txt";
-          mode = "custom";
-          format= "{content}\n{embed[url]:?/\n/}";
+      kemonoparty.postprocessors = [{
+        name = "metadata";
+        event = "post";
+        filename = "{id} {title}.txt";
+        mode = "custom";
+        format = ''
+          {content}
+          {embed[url]:?/
+          /}'';
 
-          filter= "embed.get('url') or re.search(r'(?i)(gigafile|xgf|1drv|mediafire|mega|google|drive)', content)";
-        }
-      ];
+        filter =
+          "embed.get('url') or re.search(r'(?i)(gigafile|xgf|1drv|mediafire|mega|google|drive)', content)";
+      }];
 
       mangadex = {
         lang = "en";
         postprocessors = [ "cbz" ];
       };
-        
+
     };
 
     settings.downloader = {
@@ -97,5 +95,5 @@ in
 
     settings.cache.file = "${galleryDlPath}/cache.sqlite3";
   };
-  
+
 }

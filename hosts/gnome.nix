@@ -5,10 +5,10 @@
     enable = true;
 
     displayManager.gdm.enable = true;
-    
+
     desktopManager.gnome.enable = true;
     displayManager.defaultSession = "gnome";
-    
+
     layout = "us";
     xkbVariant = "";
   };
@@ -23,10 +23,8 @@
 
     gnome.gnome-tweaks
     adw-gtk3
-    
+
     input-remapper
     wl-clipboard
-
-    inputs.nix-software-center.packages.${system}.nix-software-center
   ];
 }

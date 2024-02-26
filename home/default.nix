@@ -1,14 +1,14 @@
 { config, inputs, home-user, ... }: {
-  imports = [
-    ./programs
-    inputs.nix-flatpak.homeManagerModules.nix-flatpak
-  ];
+  imports = [ ./programs inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
 
   nixpkgs.config = {
     allowUnfree = true;
     allowUnfreePredicate = _: true;
   };
-  
+
+  xdg.enable = true;
+  xdg.userDirs.enable = true;
+
   home = {
     username = home-user;
     homeDirectory = "/home/${home-user}";
@@ -18,14 +18,13 @@
 
   programs.home-manager.enable = true;
 
-  programs.fish = {
-    enable = true;
-  };
+  programs.fish = { enable = true; };
 
   home.sessionPath = [
     "${config.home.homeDirectory}/.local/bin"
     "${config.home.homeDirectory}/.cargo/bin"
     "${config.home.homeDirectory}/Android/Sdk/platform-tools"
+    "${config.xdg.configHome}/emacs/bin"
   ];
 
   home.sessionVariables = {

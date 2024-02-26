@@ -35,36 +35,44 @@
     # sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, nixpkgs-stable, chaotic, nix-flatpak, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nur, nixpkgs-stable, chaotic
+    , nix-flatpak, ... }@inputs:
     let
       system = "x86_64-linux";
       home-user = "guinaifen";
-
-      pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
-      pkgs-stable = import nixpkgs-stable { inherit system; config = { allowUnfree = true; }; };
+      
+      pkgs-stable = import nixpkgs-stable {
+        inherit system;
+        config = { allowUnfree = true; };
+      };
 
       home-manager-setting = {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
 
-        home-manager.extraSpecialArgs = { inherit inputs pkgs-stable home-user; };
+        home-manager.extraSpecialArgs = {
+          inherit inputs pkgs-stable home-user;
+        };
         home-manager.users.${home-user} = import ./home;
       };
-    in
-    {
+    in {
 
       nixosConfigurations.xianzhou = nixpkgs.lib.nixosSystem {
         inherit system;
 
-        specialArgs = { inherit inputs home-user nur; };
+        specialArgs = { inherit inputs home-user; };
 
         modules = [
+          chaotic.nixosModules.default
+          nix-flatpak.nixosModules.nix-flatpak
+
           ./hosts
           ./hosts/plasma.nix
 
           ./overlays
 
-          home-manager.nixosModules.home-manager home-manager-setting
+          home-manager.nixosModules.home-manager
+          home-manager-setting
         ];
 
       };
@@ -75,16 +83,17 @@
         specialArgs = { inherit inputs home-user; };
 
         modules = [
-          chaotic.nixosModules.default 
+          chaotic.nixosModules.default
           nix-flatpak.nixosModules.nix-flatpak
           # sops-nix.nixosModules.sops
-          
+
           ./hosts
           ./hosts/gnome.nix
 
           ./overlays
 
-          home-manager.nixosModules.home-manager home-manager-setting
+          home-manager.nixosModules.home-manager
+          home-manager-setting
         ];
 
       };

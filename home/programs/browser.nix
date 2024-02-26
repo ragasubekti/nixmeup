@@ -1,5 +1,4 @@
-{ pkgs, home-user, ...}: 
-{
+{ pkgs, home-user, ... }: {
   programs = {
     firefox = {
       enable = true;

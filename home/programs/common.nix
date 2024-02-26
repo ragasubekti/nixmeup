@@ -1,12 +1,11 @@
-{
-  pkgs, ...
-}: {
+{ pkgs, inputs, ... }: {
   home.packages = with pkgs; [
     fastfetch
 
     xdg-utils
     clifm
     fd
+    ripgrep
 
     zip
     unzip
@@ -19,7 +18,6 @@
     yarn
 
     dbeaver
-    mycli
     pgcli
 
     keepassxc
@@ -37,8 +35,8 @@
     gnumake
     cmake
 
-    android-studio
-    flutter
+    # android-studio
+    # flutter
 
     rustup
 
@@ -60,12 +58,14 @@
 
     distrobox
 
-    onlyoffice-bin
+    # onlyoffice-bin
     calibre-web
 
     cached-nix-shell
     deja-dup
     pika-backup
+
+    inputs.nix-software-center.packages.${system}.nix-software-center
   ];
 
   programs = {
@@ -80,6 +80,12 @@
     zellij = {
       enable = true;
       enableFishIntegration = true;
+
+      settings = {
+        simplified_ui = true;
+        theme = "catppuccin-mocha";
+        default_layout = "compact";
+      };
     };
 
     fzf = {
@@ -99,7 +105,7 @@
     };
 
     direnv = {
-      enable = true; 
+      enable = true;
       nix-direnv.enable = true;
     };
   };

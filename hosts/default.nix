@@ -1,12 +1,10 @@
-{ config, pkgs, inputs, home-user, ... }:
-{
-  imports =
-    [
-      /etc/nixos/hardware-configuration.nix
-      ./storage.nix
-      ./virtualization.nix
-      inputs.nix-gaming.nixosModules.pipewireLowLatency
-    ];
+{ config, pkgs, inputs, home-user, ... }: {
+  imports = [
+    ./hardware-configuration.nix
+    ./storage.nix
+    ./virtualization.nix
+    inputs.nix-gaming.nixosModules.pipewireLowLatency
+  ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -35,7 +33,7 @@
   services = {
     printing.enable = false;
     flatpak.enable = true;
-  
+
     ratbagd.enable = true;
   };
 
@@ -57,14 +55,13 @@
 
   zramSwap.enable = true;
 
-  users.groups = {
-    media_user.gid = 569;
-  };
+  users.groups = { media_user.gid = 569; };
 
   users.users.${home-user} = {
     isNormalUser = true;
     description = "Guinaifen";
-    extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd" "media_user" ];
+    extraGroups =
+      [ "networkmanager" "wheel" "adbusers" "libvirtd" "media_user" ];
     shell = pkgs.fish;
   };
 
@@ -93,14 +90,16 @@
     fontDir.enable = true;
 
     packages = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    liberation_ttf
-    merriweather
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      liberation_ttf
+      merriweather
 
-    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" "CascadiaCode" ]; })
-  ];
+      (nerdfonts.override {
+        fonts = [ "FiraCode" "DroidSansMono" "CascadiaCode" ];
+      })
+    ];
 
     fontconfig.defaultFonts = {
       serif = [ "Merriweather" ];
@@ -118,15 +117,11 @@
       options = [ "ro" "resolve-symlinks" "x-gvfs-hide" ];
     };
 
-
     aggregatedIcons = pkgs.buildEnv {
       name = "system-icons";
-      paths = with pkgs; [
-        gnome.gnome-themes-extra
-      ];
+      paths = with pkgs; [ gnome.gnome-themes-extra ];
       pathsToLink = [ "/share/icons" ];
     };
-
 
     aggregatedFonts = pkgs.buildEnv {
       name = "system-fonts";
@@ -138,8 +133,6 @@
     "/usr/share/icons" = mkRoSymBind "${aggregatedIcons}/share/icons";
     "/usr/local/share/fonts" = mkRoSymBind "${aggregatedFonts}/share/fonts";
   };
-
-
 
   hardware = {
     bluetooth.enable = true;
@@ -160,7 +153,7 @@
     };
   };
 
-  environment.sessionVariables = { 
+  environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "iHD";
     NIXOS_OZONE_WL = "1";
   };
