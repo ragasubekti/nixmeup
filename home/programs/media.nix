@@ -1,4 +1,4 @@
-{ pkgs, ... }: 
+{ pkgs, home, ... }:
 let
   galleryDlPath = "/mnt/hdd/data/gallery-dl"; 
 in
@@ -95,7 +95,7 @@ in
       mtime = false;
     };
 
-    cache.file = "${galleryDlPath}/cache.sqlite3";
+    settings.cache.file = "${galleryDlPath}/cache.sqlite3";
   };
   
 }

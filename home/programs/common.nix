@@ -1,5 +1,5 @@
 {
-  lib, pkgs, pkgs-stable, inputs, ...
+  pkgs, ...
 }: {
   home.packages = with pkgs; [
     fastfetch
@@ -28,7 +28,6 @@
     imagemagick
     scrcpy
     pipx
-    neovim
 
     stdenvNoCC
     gcc
@@ -61,11 +60,6 @@
 
     distrobox
 
-    emacs-nox
-
-    nil
-    vscode
-
     onlyoffice-bin
     calibre-web
 
@@ -82,7 +76,6 @@
     ssh.enable = true;
     aria2.enable = true;
     gpg.enable = true;
-    gpg-agent.enable = true;
 
     zellij = {
       enable = true;

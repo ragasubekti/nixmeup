@@ -57,10 +57,14 @@
 
   zramSwap.enable = true;
 
+  users.groups = {
+    media_user.gid = 569;
+  };
+
   users.users.${home-user} = {
     isNormalUser = true;
     description = "Guinaifen";
-    extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd" "media_user" ];
     shell = pkgs.fish;
   };
 

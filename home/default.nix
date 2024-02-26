@@ -1,4 +1,4 @@
-{ inputs, home-user, ... }: {
+{ config, inputs, home-user, ... }: {
   imports = [
     ./programs
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
@@ -23,14 +23,17 @@
   };
 
   home.sessionPath = [
-    "$HOME/.local/bin"
-    "$HOME/.cargo/bin"
-    "$HOME/Android/Sdk/platform-tools"
+    "${config.home.homeDirectory}/.local/bin"
+    "${config.home.homeDirectory}/.cargo/bin"
+    "${config.home.homeDirectory}/Android/Sdk/platform-tools"
   ];
 
   home.sessionVariables = {
-    ANDROID_SDK_ROOT = "$HOME/Android/Sdk";
-    ANDROID_HOME = "$HOME/Android/Sdk";
+    ANDROID_SDK_ROOT = "${config.home.homeDirectory}/Android/Sdk";
+    ANDROID_HOME = "${config.home.homeDirectory}/Android/Sdk";
+    DOOMDIR = "${config.xdg.configHome}/doom-config";
+    DOOMLOCALDIR = "${config.xdg.configHome}/doom-local";
+    LSP_USE_PLISTS = "true";
   };
 
   systemd.user.startServices = "sd-switch";

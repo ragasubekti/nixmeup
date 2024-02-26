@@ -40,13 +40,14 @@
       system = "x86_64-linux";
       home-user = "guinaifen";
 
+      pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
       pkgs-stable = import nixpkgs-stable { inherit system; config = { allowUnfree = true; }; };
 
       home-manager-setting = {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
 
-        home-manager.extraSpecialArgs = { inherit inputs pkgs-stable; };
+        home-manager.extraSpecialArgs = { inherit inputs pkgs-stable home-user; };
         home-manager.users.${home-user} = import ./home;
       };
     in
@@ -55,7 +56,7 @@
       nixosConfigurations.xianzhou = nixpkgs.lib.nixosSystem {
         inherit system;
 
-        specialArgs = { inherit inputs home-user; };
+        specialArgs = { inherit inputs home-user nur; };
 
         modules = [
           ./hosts
@@ -63,7 +64,7 @@
 
           ./overlays
 
-          home-manager.nixosModules.home-manager { inherit home-manager-setting; }
+          home-manager.nixosModules.home-manager home-manager-setting
         ];
 
       };
@@ -83,7 +84,7 @@
 
           ./overlays
 
-          home-manager.nixosModules.home-manager { inherit home-manager-setting home-user; }
+          home-manager.nixosModules.home-manager home-manager-setting
         ];
 
       };
