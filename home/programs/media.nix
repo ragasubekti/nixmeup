@@ -1,16 +1,19 @@
-{ lib, pkgs, ... }: {
+{ pkgs, ... }: 
+let
+  galleryDlPath = "/mnt/hdd/data/gallery-dl"; 
+in
+{
   home.packages = with pkgs; [
     ffmpeg-full
     opusTools
     opustags
 
     # Disabled no HWA
-    # handbrake 
+    # handbrake
     
     vlc
     celluloid
 
-    gallery-dl
     imgbrd-grabber
 
     easyeffects
@@ -50,4 +53,49 @@
       };
     };
   };
+
+  programs.gallery-dl = {
+    enable = true;
+    settings.extractor = {
+      base-directory = galleryDlPath;
+      archive = "${galleryDlPath}/archive.sqlite3";
+      archive-pragma = [ "journal_mode=WAL" "synchronous=NORMAL" ];
+
+      postprocessors = [
+        {
+          name = "metadata";
+          mode = "tags";
+          whitelist = ["danbooru" "moebooru" "sankaku"];
+        }
+      ];
+
+      kemonoparty.postprocessors = [
+        {
+          name= "metadata";
+          event = "post";
+          filename= "{id} {title}.txt";
+          mode = "custom";
+          format= "{content}\n{embed[url]:?/\n/}";
+
+          filter= "embed.get('url') or re.search(r'(?i)(gigafile|xgf|1drv|mediafire|mega|google|drive)', content)";
+        }
+      ];
+
+      mangadex = {
+        lang = "en";
+        postprocessors = [ "cbz" ];
+      };
+        
+    };
+
+    settings.downloader = {
+      retries = 3;
+      timeout = 10;
+      part-directory = "${galleryDlPath}/.tmp";
+      mtime = false;
+    };
+
+    cache.file = "${galleryDlPath}/cache.sqlite3";
+  };
+  
 }

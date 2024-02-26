@@ -2,7 +2,6 @@
   lib, pkgs, pkgs-stable, inputs, ...
 }: {
   home.packages = with pkgs; [
-    nnn
     fastfetch
 
     xdg-utils
@@ -69,7 +68,6 @@
 
     onlyoffice-bin
     calibre-web
-    pkgs-stable.obsidian
 
     cached-nix-shell
     deja-dup
@@ -83,6 +81,8 @@
     jq.enable = true;
     ssh.enable = true;
     aria2.enable = true;
+    gpg.enable = true;
+    gpg-agent.enable = true;
 
     zellij = {
       enable = true;
@@ -108,10 +108,6 @@
     direnv = {
       enable = true; 
       nix-direnv.enable = true;
-    };
-
-    alacritty = {
-      enable = true;
     };
   };
 }

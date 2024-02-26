@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   services.xserver = {
@@ -13,9 +13,7 @@
     xkbVariant = "";
   };
 
-  xdg.portal = {
-    enable = true;
-  };
+  xdg.portal.enable = true;
 
   environment.systemPackages = with pkgs; [
     git

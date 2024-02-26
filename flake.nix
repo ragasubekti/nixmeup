@@ -9,6 +9,7 @@
       "https://nix-gaming.cachix.org"
       "https://ezkea.cachix.org"
     ];
+
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -28,50 +29,41 @@
 
     nur.url = "github:nix-community/NUR";
     nix-gaming.url = "github:fufexan/nix-gaming";
-
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     nix-software-center.url = "github:snowfallorg/nix-software-center";
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
+    # sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, nixpkgs-stable, chaotic, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nur, nixpkgs-stable, chaotic, nix-flatpak, ... }@inputs:
     let
       system = "x86_64-linux";
+      home-user = "guinaifen";
 
-      pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
-      pkgs-stable = import nixpkgs-stable { inherit system; config = { allowUnfree = true; permittedInsecurePackages = [ "electron-25.9.0" ]; }; };
+      pkgs-stable = import nixpkgs-stable { inherit system; config = { allowUnfree = true; }; };
+
+      home-manager-setting = {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+
+        home-manager.extraSpecialArgs = { inherit inputs pkgs-stable; };
+        home-manager.users.${home-user} = import ./home;
+      };
     in
     {
 
       nixosConfigurations.xianzhou = nixpkgs.lib.nixosSystem {
         inherit system;
 
-        specialArgs = { inherit inputs; };
-        
+        specialArgs = { inherit inputs home-user; };
 
         modules = [
           ./hosts
           ./hosts/plasma.nix
 
-          {
-            nixpkgs.overlays = with pkgs; [
-              nur.overlay
-              (final: prev: {
-                wallpaper-engine-kde = plasma5Packages.callPackage ./overlays/wallpaper-engine-kde.nix {
-                  inherit (gst_all_1) gst-libav; 
-                  inherit (python3Packages) websockets; 
-                };
-              })
-              (final: prev: { adw-gtk3 = prev.callPackage ./overlays/adw-gtk.nix {}; })
-            ];
-          }
+          ./overlays
 
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-
-            home-manager.extraSpecialArgs = { inherit inputs pkgs-stable; };
-            home-manager.users.guinaifen = import ./home;
-          }
+          home-manager.nixosModules.home-manager { inherit home-manager-setting; }
         ];
 
       };
@@ -79,54 +71,23 @@
       nixosConfigurations.liyue = nixpkgs.lib.nixosSystem {
         inherit system;
 
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs home-user; };
 
         modules = [
           chaotic.nixosModules.default 
+          nix-flatpak.nixosModules.nix-flatpak
+          # sops-nix.nixosModules.sops
           
           ./hosts
           ./hosts/gnome.nix
 
-          {
-            nixpkgs.overlays = with pkgs; [
-              nur.overlay
-              (final: prev: {
-                wallpaper-engine-kde = plasma5Packages.callPackage ./overlays/wallpaper-engine-kde.nix {
-                  inherit (gst_all_1) gst-libav; 
-                  inherit (python3Packages) websockets; 
-                };
-              })
-              (final: prev: { adw-gtk3 = prev.callPackage ./overlays/adw-gtk.nix {}; })
-            ];
-          }
+          ./overlays
 
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-
-            home-manager.extraSpecialArgs = { inherit inputs pkgs-stable; };
-            home-manager.users.guinaifen = import ./home;
-          }
+          home-manager.nixosModules.home-manager { inherit home-manager-setting home-user; }
         ];
 
       };
 
-      devShells.${system}.dotnet8 = let
-        pkgs = import nixpkgs {
-            inherit system;
-        };
-        in pkgs.mkShell {
-          packages = with pkgs; [
-            dotnet-sdk_8
-            dotnet-runtime_8
-            SDL2
-            ffmpeg-full
-            nushell
-        ];
-
-        shellHook = ''
-          exec nu
-        '';
-      };
+      devShells.${system} = import ./develop;
     };
 }

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ home-user, ... }:
 
 {
   fileSystems."/home" =
@@ -17,5 +17,16 @@
     { device = "/dev/disk/by-uuid/bbc5a71c-af08-4d0a-a84d-509ca06f0356";
       fsType = "btrfs";
       options = [ "noatime" "lazytime" "compress=zstd" ];
+    };
+
+  fileSystems."/home/${home-user}/games" = 
+    {
+      depends = [
+        "/mnt/games"
+        "/home/${home-user}"
+      ];
+
+      device = "/mnt/games";
+      options = [ "bind" ];
     };
 }

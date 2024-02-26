@@ -1,8 +1,8 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, home-user, ... }:
 {
   imports =
     [
-      ./hardware-configuration.nix
+      /etc/nixos/hardware-configuration.nix
       ./storage.nix
       ./virtualization.nix
       inputs.nix-gaming.nixosModules.pipewireLowLatency
@@ -18,7 +18,6 @@
   networking.networkmanager.enable = true;
 
   time.timeZone = "Asia/Tokyo";
-
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -33,15 +32,16 @@
     LC_TIME = "ja_JP.UTF-8";
   };
 
-  services.printing.enable = false;
-  services.flatpak.enable = true;
+  services = {
+    printing.enable = false;
+    flatpak.enable = true;
   
-  services.ratbagd.enable = true;
+    ratbagd.enable = true;
+  };
 
   sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
-
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -57,18 +57,32 @@
 
   zramSwap.enable = true;
 
-  users.users.guinaifen = {
+  users.users.${home-user} = {
     isNormalUser = true;
     description = "Guinaifen";
     extraGroups = [ "networkmanager" "wheel" "adbusers" "libvirtd" ];
     shell = pkgs.fish;
   };
 
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.allowUnfreePredicate = _: true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    allowUnfreePredicate = _: true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.trusted-users = [ "guinaifen" ];
+    packageOverrides = pkgs: {
+      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+    };
+  };
+
+  nix = {
+    optimise.automatic = true;
+
+    settings = {
+      auto-optimise-store = true;
+
+      experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = [ "guinaifen" ];
+    };
+  };
 
   fonts = {
     enableDefaultPackages = true;
@@ -99,6 +113,8 @@
       fsType = "fuse.bindfs";
       options = [ "ro" "resolve-symlinks" "x-gvfs-hide" ];
     };
+
+
     aggregatedIcons = pkgs.buildEnv {
       name = "system-icons";
       paths = with pkgs; [
@@ -106,29 +122,38 @@
       ];
       pathsToLink = [ "/share/icons" ];
     };
+
+
     aggregatedFonts = pkgs.buildEnv {
       name = "system-fonts";
       paths = config.fonts.packages;
       pathsToLink = [ "/share/fonts" ];
     };
+
   in {
     "/usr/share/icons" = mkRoSymBind "${aggregatedIcons}/share/icons";
     "/usr/local/share/fonts" = mkRoSymBind "${aggregatedFonts}/share/fonts";
   };
 
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  };
 
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      vaapiIntel
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
+  hardware = {
+    bluetooth.enable = true;
+
+    opengl = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+        vaapiIntel
+        vaapiVdpau
+        libvdpau-va-gl
+      ];
+    };
+
+    logitech.wireless = {
+      enable = true;
+      enableGraphical = true;
+    };
   };
 
   environment.sessionVariables = { 
@@ -136,19 +161,14 @@
     NIXOS_OZONE_WL = "1";
   };
 
-  hardware.logitech.wireless = {
-    enable = true;
-    enableGraphical = true;
+  programs = {
+    fish.enable = true;
+    dconf.enable = true;
+
+    gamemode.enable = true;
+
+    adb.enable = true;
   };
-  hardware.bluetooth.enable = true;
-
-
-  programs.fish.enable = true;
-  programs.dconf.enable = true;
-
-  programs.gamemode.enable = true;
-
-  programs.adb.enable = true;
 
   system.stateVersion = "23.11";
 }

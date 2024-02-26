@@ -1,9 +1,9 @@
-{ pkgs, config, inputs, ...}: 
+{ pkgs, home-user, ...}: 
 {
   programs = {
     firefox = {
       enable = true;
-      profiles.guinaifen = {
+      profiles.${home-user} = {
         extensions = with pkgs.nur.repos.rycee.firefox-addons; [
           ublock-origin
           sponsorblock
