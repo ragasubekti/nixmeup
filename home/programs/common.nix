@@ -55,7 +55,8 @@
     sqlitebrowser
     duperemove
     rmlint
-    trash-cli
+    # trash-cli
+    trashy
 
     distrobox
 

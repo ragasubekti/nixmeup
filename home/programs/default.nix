@@ -7,5 +7,6 @@
     ./media.nix
     ./games.nix
     ./development.nix
+    ./vim.nix
   ];
 }

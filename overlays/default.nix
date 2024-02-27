@@ -23,5 +23,7 @@
         });
       });
     })
+
+    # (final: prev: { vimPlugins.surround = prev.vimPlugins.surround; })
   ];
 }

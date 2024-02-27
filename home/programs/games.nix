@@ -1,6 +1,5 @@
 { config, pkgs, inputs, ... }:
-let
-  nix-gaming = inputs.nix-gaming.packages.${pkgs.hostPlatform.system};
+let nix-gaming = inputs.nix-gaming.packages.${pkgs.hostPlatform.system};
 in {
   home.packages = [
     nix-gaming.osu-lazer-bin

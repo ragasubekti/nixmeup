@@ -1,6 +1,7 @@
 { config, inputs, home-user, ... }: {
   imports = [
     ./programs
+    # inputs.nixvim.homeManagerModules.nixvim
   ];
 
   nixpkgs.config = {

@@ -1,10 +1,46 @@
 { config, pkgs, lib, ... }: {
-  home.packages = with pkgs; [ nil nixfmt shfmt shellcheck ];
+  home.packages = with pkgs; [
+    nil
+    nixfmt
+    nixpkgs-fmt
+
+    shfmt
+    shellcheck
+    nur.repos.ataraxiasjel.waydroid-script
+    python3
+    # stdV
+    stdenvNoCC
+    gcc13
+    gnumake
+    cmake
+    rustup
+
+    nodejs_21
+
+    nodePackages.pnpm
+    yarn
+
+    android-studio
+    flutter
+
+    lua
+    stylua
+
+    go
+    gopls
+    zulu
+  ];
 
   programs.emacs = {
     enable = true;
     package = pkgs.emacs-nox;
     extraPackages = epkgs: [ epkgs.vterm ];
+  };
+
+  programs.neovim = {
+    enable = false;
+    withNodeJs = true;
+    vimAlias = true;
   };
 
   home.activation.install-doom = lib.hm.dag.entryAfter [ "installPackages" ] ''
